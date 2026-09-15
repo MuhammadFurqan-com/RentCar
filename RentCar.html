@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Car Rental</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        .container {
+            width: 700px;
+            margin: auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: #667eea;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #667eea;
+            color: white;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2>Car Rental Form</h2>
+
+        <form onsubmit="AddStudent(event)">
+
+            <label for="carid">CarID:</label>
+            <input type="text" id="carid" required>
+
+            <label for="carname">CarName:</label>
+            <input type="text" id="carname" required>
+
+            <label for="brand">Brand:</label>
+            <input type="text" id="brand" required>
+
+            <label for="color">Color:</label>
+            <input type="text" id="color" required>
+
+            <label for="model">Model:</label>
+            <input type="text" id="model" required>
+
+            <label for="rentpercolor">Rent Per Color:</label>
+            <input type="number" id="rentpercolor" required>
+
+            <button type="submit">
+                Submit
+            </button>
+
+        </form>
+
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>CarID</th>
+                    <th>CarName</th>
+                    <th>Brand</th>
+                    <th>Color</th>
+                    <th>Model</th>
+                    <th>RentPerColor</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="carTableBody"></tbody>
+
+        </table>
+
+    </div>
+
+
+    <script>
+
+        let cars = [];
+
+
+        function AddStudent(event) {
+
+            event.preventDefault();
+
+
+            let CarID =
+                document.getElementById("carid").value;
+
+            let CarName =
+                document.getElementById("carname").value;
+
+            let Brand =
+                document.getElementById("brand").value;
+
+            let Color =
+                document.getElementById("color").value;
+
+            let Model =
+                document.getElementById("model").value;
+
+            let RentPerColor =
+                document.getElementById("rentpercolor").value;
+
+
+            let car = {
+
+                CarID: CarID,
+                CarName: CarName,
+                Brand: Brand,
+                Color: Color,
+                Model: Model,
+                RentPerColor: RentPerColor
+
+            };
+
+
+            cars.push(car);
+
+            displayCars();
+
+            document.querySelector("form").reset();
+
+        }
+
+
+        function displayCars() {
+
+            let tableBody =
+                document.getElementById("carTableBody");
+
+            tableBody.innerHTML = "";
+
+
+            cars.forEach(function(car) {
+
+                let row = `
+
+                    <tr>
+
+                        <td>${car.CarID}</td>
+                        <td>${car.CarName}</td>
+                        <td>${car.Brand}</td>
+                        <td>${car.Color}</td>
+                        <td>${car.Model}</td>
+                        <td>${car.RentPerColor}</td>
+
+                    </tr>
+
+                `;
+
+                tableBody.innerHTML += row;
+
+            });
+
+        }
+
+    </script>
+
+</body>
+
+</html>
