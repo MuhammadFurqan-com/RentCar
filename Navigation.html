@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Student Management System</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 80px;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #dbeafe, #eff6ff);
+        min-height: 100vh;
+        color: #1f2937;
+    }
+
+    /* ================= NAVBAR ================= */
+
+    .navbar {
+        width: 100%;
+        min-height: 70px;
+        background: #111827;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .navbar-container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 0 20px;
+        min-height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .navbar-logo {
+        color: white;
+        text-decoration: none;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .navbar-logo:hover {
+        color: #38bdf8;
+    }
+
+    .navbar-menu {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        list-style: none;
+    }
+
+    .navbar-menu a {
+        color: white;
+        text-decoration: none;
+        padding: 25px 7px;
+        display: block;
+        font-size: 14px;
+        transition: 0.3s;
+    }
+
+    .navbar-menu a:hover {
+        color: #38bdf8;
+    }
+
+    .navbar-toggle {
+        display: none;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .bar {
+        display: block;
+        width: 28px;
+        height: 3px;
+        margin: 5px 0;
+        background: white;
+        border-radius: 5px;
+    }
+
+    /* ================= CONTAINER ================= */
+
+    .container {
+        width: 92%;
+        max-width: 1100px;
+        margin: 35px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    h1 {
+        text-align: center;
+        color: #111827;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #6b7280;
+        margin-bottom: 25px;
+    }
+
+    /* ================= FORM ================= */
+
+    .form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .full {
+        grid-column: 1 / -1;
+    }
+
+    label {
+        font-weight: bold;
+        margin-bottom: 7px;
+        color: #374151;
+    }
+
+    input,
+    select,
+    textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 15px;
+        outline: none;
+        font-family: inherit;
+        transition: 0.3s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    /* ================= BUTTONS ================= */
+
+    .buttons {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 10px;
+    }
+
+    .btn {
+        border: none;
+        padding: 12px 25px;
+        border-radius: 6px;
+        color: white;
+        cursor: pointer;
+        font-size: 15px;
+        transition: 0.3s;
+    }
+
+    .btn-save {
+        background: #2563eb;
+    }
+
+    .btn-save:hover {
+        background: #1d4ed8;
+    }
+
+    .btn-reset {
+        background: #6b7280;
+    }
+
+    .btn-reset:hover {
+        background: #4b5563;
+    }
+
+    .btn-danger {
+        background: #dc2626;
+        padding: 7px 12px;
+    }
+
+    .btn-danger:hover {
+        background: #b91c1c;
+    }
+
+    /* ================= PHOTO ================= */
+
+    .photo-preview {
+        width: 100px;
+        height: 100px;
+        margin-top: 10px;
+        border-radius: 8px;
+        object-fit: cover;
+        display: none;
+        border: 2px solid #d1d5db;
+    }
+
+    /* ================= TABLE ================= */
+
+    .table-container {
+        margin-top: 30px;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+    }
+
+    th,
+    td {
+        border: 1px solid #d1d5db;
+        padding: 11px;
+        text-align: left;
+    }
+
+    th {
+        background: #1f2937;
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background: #f3f4f6;
+    }
+
+    .no-records {
+        text-align: center !important;
+        color: #6b7280;
+    }
+
+    /* ================= DASHBOARD ================= */
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+
+    .card {
+        padding: 25px;
+        border-radius: 10px;
+        color: white;
+        text-align: center;
+    }
+
+    .card h2 {
+        font-size: 32px;
+        margin-bottom: 8px;
+    }
+
+    .blue {
+        background: #2563eb;
+    }
+
+    .green {
+        background: #16a34a;
+    }
+
+    .orange {
+        background: #ea580c;
+    }
+
+    .purple {
+        background: #7c3aed;
+    }
+
+    /* ================= CONTACT ================= */
+
+    .contact-box {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+    }
+
+    .contact-info {
+        background: #eff6ff;
+        padding: 25px;
+        border-radius: 10px;
+    }
+
+    .contact-info h2 {
+        margin-bottom: 15px;
+    }
+
+    .contact-info p {
+        margin: 15px 0;
+    }
+
+    /* ================= FOOTER ================= */
+
+    footer {
+        background: #111827;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        margin-top: 40px;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 768px) {
+
+        .navbar-toggle {
+            display: block;
+        }
+
+        .navbar-menu {
+            position: absolute;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            display: none;
+            flex-direction: column;
+            background: #111827;
+            padding: 10px 0;
+            gap: 0;
+        }
+
+        .navbar-menu.active {
+            display: flex;
+        }
+
+        .navbar-menu li {
+            width: 100%;
+        }
+
+        .navbar-menu a {
+            padding: 14px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .form {
+            grid-template-columns: 1fr;
+        }
+
+        .full {
+            grid-column: auto;
+        }
+
+        .buttons {
+            grid-column: auto;
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .cards {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .contact-box {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 500px) {
+
+        .cards {
+            grid-template-columns: 1fr;
+        }
+
+        .container {
+            width: 95%;
+            padding: 20px;
+        }
+
+        .navbar-logo {
+            font-size: 20px;
+        }
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="navbar-container">
+
+        <a href="#dashboard" class="navbar-logo">
+            StudentMS
+        </a>
+
+        <button
+            type="button"
+            class="navbar-toggle"
+            aria-label="Open menu"
+            aria-expanded="false">
+
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+
+        </button>
+
+        <ul class="navbar-menu">
+
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#student">Student</a></li>
+            <li><a href="#admission">Admission</a></li>
+            <li><a href="#teacher">Teacher</a></li>
+            <li><a href="#classes">Classes</a></li>
+            <li><a href="#exam">Exams</a></li>
+            <li><a href="#report">Reports</a></li>
+            <li><a href="#contact">Contact</a></li>
+
+        </ul>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= DASHBOARD ================= -->
+
+<section class="container" id="dashboard">
+
+    <h1>Dashboard</h1>
+
+    <p class="subtitle">
+        Student Management System Dashboard
+    </p>
+
+    <div class="cards">
+
+        <div class="card blue">
+            <h2 id="studentCount">0</h2>
+            <p>Students</p>
+        </div>
+
+        <div class="card green">
+            <h2 id="teacherCount">0</h2>
+            <p>Teachers</p>
+        </div>
+
+        <div class="card orange">
+            <h2 id="classCount">5</h2>
+            <p>Classes</p>
+        </div>
+
+        <div class="card purple">
+            <h2 id="examCount">0</h2>
+            <p>Exams</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= STUDENT ================= -->
+
+<section class="container" id="student">
+
+    <h1>Student Registration</h1>
+
+    <p class="subtitle">
+        Enter student information below
+    </p>
+
+    <form class="form" id="studentForm">
+
+        <div class="form-group">
+            <label for="studentId">Student ID</label>
+            <input
+                type="text"
+                id="studentId"
+                placeholder="Enter Student ID"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="studentName">Student Name</label>
+            <input
+                type="text"
+                id="studentName"
+                placeholder="Enter Student Name"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="fatherName">Father Name</label>
+            <input
+                type="text"
+                id="fatherName"
+                placeholder="Enter Father Name"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="studentClass">Class</label>
+
+            <select id="studentClass" required>
+                <option value="">Select Class</option>
+                <option>Nursery</option>
+                <option>KG</option>
+                <option>Class 1</option>
+                <option>Class 2</option>
+                <option>Class 3</option>
+                <option>Class 4</option>
+                <option>Class 5</option>
+                <option>Class 6</option>
+                <option>Class 7</option>
+                <option>Class 8</option>
+                <option>Class 9</option>
+                <option>Class 10</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="session">Session</label>
+
+            <select id="session" required>
+                <option value="">Select Session</option>
+                <option>2025-2026</option>
+                <option>2026-2027</option>
+                <option>2027-2028</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="studentDob">Date of Birth</label>
+            <input
+                type="date"
+                id="studentDob"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="studentGender">Gender</label>
+
+            <select id="studentGender" required>
+                <option value="">Select Gender</option>
+                <option>Male</option>
+                <option>Female</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="studentPhone">Phone Number</label>
+
+            <input
+                type="tel"
+                id="studentPhone"
+                placeholder="03XXXXXXXXX"
+                pattern="03[0-9]{9}"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="studentEmail">Email</label>
+
+            <input
+                type="email"
+                id="studentEmail"
+                placeholder="student@example.com">
+        </div>
+
+        <div class="form-group">
+            <label for="photo">Student Photo</label>
+
+            <input
+                type="file"
+                id="photo"
+                accept="image/*">
+
+            <img
+                id="photoPreview"
+                class="photo-preview"
+                alt="Student Photo Preview">
+        </div>
+
+        <div class="form-group full">
+            <label for="studentAddress">Address</label>
+
+            <textarea
+                id="studentAddress"
+                placeholder="Enter Student Address"
+                required></textarea>
+        </div>
+
+        <div class="buttons">
+
+            <button
+                type="submit"
+                class="btn btn-save">
+                Save Student
+            </button>
+
+            <button
+                type="reset"
+                class="btn btn-reset">
+                Reset
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<!-- ================= ADMISSION ================= -->
+
+<section class="container" id="admission">
+
+    <h1>Admission Form</h1>
+
+    <p class="subtitle">
+        Enter admission information below
+    </p>
+
+    <form class="form" id="admissionForm">
+
+        <div class="form-group">
+            <label for="admissionId">Admission ID</label>
+
+            <input
+                type="text"
+                id="admissionId"
+                placeholder="Enter Admission ID"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="admissionStudentId">Student ID</label>
+
+            <input
+                type="text"
+                id="admissionStudentId"
+                placeholder="Enter Student ID"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="admissionStudentName">Student Name</label>
+
+            <input
+                type="text"
+                id="admissionStudentName"
+                placeholder="Enter Student Name"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="admissionFatherName">Father Name</label>
+
+            <input
+                type="text"
+                id="admissionFatherName"
+                placeholder="Enter Father Name"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="admissionClass">Class</label>
+
+            <select id="admissionClass" required>
+                <option value="">Select Class</option>
+                <option>Nursery</option>
+                <option>KG</option>
+                <option>Class 1</option>
+                <option>Class 2</option>
+                <option>Class 3</option>
+                <option>Class 4</option>
+                <option>Class 5</option>
+                <option>Class 6</option>
+                <option>Class 7</option>
+                <option>Class 8</option>
+                <option>Class 9</option>
+                <option>Class 10</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="admissionDate">Admission Date</label>
+
+            <input
+                type="date"
+                id="admissionDate"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="admissionDob">Date of Birth</label>
+
+            <input
+                type="date"
+                id="admissionDob"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="admissionGender">Gender</label>
+
+            <select id="admissionGender" required>
+                <option value="">Select Gender</option>
+                <option>Male</option>
+                <option>Female</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="admissionPhone">Phone Number</label>
+
+            <input
+                type="tel"
+                id="admissionPhone"
+                placeholder="03XXXXXXXXX"
+                pattern="03[0-9]{9}"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="admissionEmail">Email</label>
+
+            <input
+                type="email"
+                id="admissionEmail"
+                placeholder="student@example.com">
+        </div>
+
+        <div class="form-group">
+            <label for="admissionFee">Admission Fee</label>
+
+            <input
+                type="number"
+                id="admissionFee"
+                placeholder="Enter Admission Fee"
+                min="0"
+                required>
+        </div>
+
+        <div class="form-group full">
+            <label for="admissionAddress">Address</label>
+
+            <textarea
+                id="admissionAddress"
+                placeholder="Enter Student Address"
+                required></textarea>
+        </div>
+
+        <div class="form-group full">
+            <label for="admissionRemarks">Remarks</label>
+
+            <textarea
+                id="admissionRemarks"
+                placeholder="Enter Remarks"></textarea>
+        </div>
+
+        <div class="buttons">
+
+            <button
+                type="submit"
+                class="btn btn-save">
+                Submit Admission
+            </button>
+
+            <button
+                type="reset"
+                class="btn btn-reset">
+                Reset
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<!-- ================= TEACHER ================= -->
+
+<section class="container" id="teacher">
+
+    <h1>Teacher Registration</h1>
+
+    <p class="subtitle">
+        Enter teacher information below
+    </p>
+
+    <form class="form" id="teacherForm">
+
+        <div class="form-group">
+            <label for="teacherId">Teacher ID</label>
+
+            <input
+                type="text"
+                id="teacherId"
+                placeholder="Enter Teacher ID"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="teacherName">Teacher Name</label>
+
+            <input
+                type="text"
+                id="teacherName"
+                placeholder="Enter Teacher Name"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="teacherFatherName">Father Name</label>
+
+            <input
+                type="text"
+                id="teacherFatherName"
+                placeholder="Enter Father Name"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="teacherSubject">Subject</label>
+
+            <select id="teacherSubject" required>
+                <option value="">Select Subject</option>
+                <option>English</option>
+                <option>Urdu</option>
+                <option>Mathematics</option>
+                <option>Science</option>
+                <option>Computer</option>
+                <option>Islamiyat</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="qualification">Qualification</label>
+
+            <input
+                type="text"
+                id="qualification"
+                placeholder="e.g. BS, MA, M.Ed"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="teacherPhone">Phone Number</label>
+
+            <input
+                type="tel"
+                id="teacherPhone"
+                placeholder="03XXXXXXXXX"
+                pattern="03[0-9]{9}"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="teacherEmail">Email</label>
+
+            <input
+                type="email"
+                id="teacherEmail"
+                placeholder="teacher@example.com">
+        </div>
+
+        <div class="form-group">
+            <label for="joiningDate">Joining Date</label>
+
+            <input
+                type="date"
+                id="joiningDate"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="teacherSalary">Salary</label>
+
+            <input
+                type="number"
+                id="teacherSalary"
+                placeholder="Enter Salary"
+                min="0"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="teacherGender">Gender</label>
+
+            <select id="teacherGender" required>
+                <option value="">Select Gender</option>
+                <option>Male</option>
+                <option>Female</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="teacherStatus">Status</label>
+
+            <select id="teacherStatus" required>
+                <option value="">Select Status</option>
+                <option>Active</option>
+                <option>Inactive</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="teacherRemarks">Remarks</label>
+
+            <input
+                type="text"
+                id="teacherRemarks"
+                placeholder="Enter Remarks">
+        </div>
+
+        <div class="form-group full">
+            <label for="teacherAddress">Address</label>
+
+            <textarea
+                id="teacherAddress"
+                placeholder="Enter Teacher Address"
+                required></textarea>
+        </div>
+
+        <div class="buttons">
+
+            <button
+                type="submit"
+                class="btn btn-save">
+                Save Teacher
+            </button>
+
+            <button
+                type="reset"
+                class="btn btn-reset">
+                Reset
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<!-- ================= CLASSES ================= -->
+
+<section class="container" id="classes">
+
+    <h1>Classes</h1>
+
+    <p class="subtitle">
+        Available school classes
+    </p>
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Class ID</th>
+                    <th>Class Name</th>
+                    <th>Section</th>
+                    <th>Teacher</th>
+                    <th>Room</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>C01</td>
+                    <td>Nursery</td>
+                    <td>A</td>
+                    <td>Not Assigned</td>
+                    <td>101</td>
+                </tr>
+
+                <tr>
+                    <td>C02</td>
+                    <td>KG</td>
+                    <td>A</td>
+                    <td>Not Assigned</td>
+                    <td>102</td>
+                </tr>
+
+                <tr>
+                    <td>C03</td>
+                    <td>Class 1</td>
+                    <td>A</td>
+                    <td>Not Assigned</td>
+                    <td>103</td>
+                </tr>
+
+                <tr>
+                    <td>C04</td>
+                    <td>Class 2</td>
+                    <td>A</td>
+                    <td>Not Assigned</td>
+                    <td>104</td>
+                </tr>
+
+                <tr>
+                    <td>C05</td>
+                    <td>Class 3</td>
+                    <td>A</td>
+                    <td>Not Assigned</td>
+                    <td>105</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- ================= EXAMS ================= -->
+
+<section class="container" id="exam">
+
+    <h1>Exam Management</h1>
+
+    <p class="subtitle">
+        Add examination information
+    </p>
+
+    <form class="form" id="examForm">
+
+        <div class="form-group">
+            <label for="examId">Exam ID</label>
+
+            <input
+                type="text"
+                id="examId"
+                placeholder="Enter Exam ID"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="examName">Exam Name</label>
+
+            <input
+                type="text"
+                id="examName"
+                placeholder="e.g. Mid Term Exam"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="examStudentId">Student ID</label>
+
+            <input
+                type="text"
+                id="examStudentId"
+                placeholder="Enter Student ID"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="examSubject">Subject</label>
+
+            <select id="examSubject" required>
+                <option value="">Select Subject</option>
+                <option>English</option>
+                <option>Urdu</option>
+                <option>Mathematics</option>
+                <option>Science</option>
+                <option>Computer</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+                <option>Islamiyat</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="totalMarks">Total Marks</label>
+
+            <input
+                type="number"
+                id="totalMarks"
+                min="1"
+                placeholder="Enter Total Marks"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="obtainedMarks">Obtained Marks</label>
+
+            <input
+                type="number"
+                id="obtainedMarks"
+                min="0"
+                placeholder="Enter Obtained Marks"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="examDate">Exam Date</label>
+
+            <input
+                type="date"
+                id="examDate"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="examResult">Result</label>
+
+            <select id="examResult" required>
+                <option value="">Select Result</option>
+                <option>Pass</option>
+                <option>Fail</option>
+            </select>
+        </div>
+
+        <div class="buttons">
+
+            <button
+                type="submit"
+                class="btn btn-save">
+                Save Exam
+            </button>
+
+            <button
+                type="reset"
+                class="btn btn-reset">
+                Reset
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+
+<!-- ================= REPORT ================= -->
+
+<section class="container" id="report">
+
+    <h1>Student Reports</h1>
+
+    <p class="subtitle">
+        Exam result report
+    </p>
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Exam ID</th>
+                    <th>Student ID</th>
+                    <th>Exam</th>
+                    <th>Subject</th>
+                    <th>Total</th>
+                    <th>Obtained</th>
+                    <th>Percentage</th>
+                    <th>Result</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="reportTable">
+
+                <tr id="noReport">
+                    <td colspan="9" class="no-records">
+                        No exam reports available
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- ================= CONTACT ================= -->
+
+<section class="container" id="contact">
+
+    <h1>Contact Us</h1>
+
+    <p class="subtitle">
+        Contact school administration
+    </p>
+
+    <div class="contact-box">
+
+        <div class="contact-info">
+
+            <h2>School Information</h2>
+
+            <p>
+                <strong>School:</strong>
+                ABC Public School
+            </p>
+
+            <p>
+                <strong>Phone:</strong>
+                0300-1234567
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                school@example.com
+            </p>
+
+            <p>
+                <strong>Address:</strong>
+                Main Road, Pakistan
+            </p>
+
+        </div>
+
+        <form class="form" id="contactForm">
+
+            <div class="form-group">
+                <label for="contactName">Name</label>
+
+                <input
+                    type="text"
+                    id="contactName"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="contactEmail">Email</label>
+
+                <input
+                    type="email"
+                    id="contactEmail"
+                    required>
+            </div>
+
+            <div class="form-group full">
+                <label for="contactSubject">Subject</label>
+
+                <input
+                    type="text"
+                    id="contactSubject"
+                    required>
+            </div>
+
+            <div class="form-group full">
+                <label for="contactMessage">Message</label>
+
+                <textarea
+                    id="contactMessage"
+                    required></textarea>
+            </div>
+
+            <div class="buttons">
+
+                <button
+                    type="submit"
+                    class="btn btn-save">
+                    Send Message
+                </button>
+
+                <button
+                    type="reset"
+                    class="btn btn-reset">
+                    Reset
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <p>
+        &copy; 2026 Student Management System.
+        All Rights Reserved.
+    </p>
+
+</footer>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+    /* ================= MOBILE MENU ================= */
+
+    const menuButton =
+        document.querySelector(".navbar-toggle");
+
+    const menu =
+        document.querySelector(".navbar-menu");
+
+    menuButton.addEventListener("click", function () {
+
+        menu.classList.toggle("active");
+
+        const isOpen =
+            menu.classList.contains("active");
+
+        menuButton.setAttribute(
+            "aria-expanded",
+            isOpen
+        );
+
+        menuButton.setAttribute(
+            "aria-label",
+            isOpen ? "Close menu" : "Open menu"
+        );
+
+    });
+
+
+    /* Close menu after clicking a link */
+
+    document
+        .querySelectorAll(".navbar-menu a")
+        .forEach(function (link) {
+
+            link.addEventListener("click", function () {
+
+                menu.classList.remove("active");
+
+                menuButton.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+                menuButton.setAttribute(
+                    "aria-label",
+                    "Open menu"
+                );
+
+            });
+
+        });
+
+
+    /* ================= COUNTERS ================= */
+
+    let studentCount = 0;
+    let teacherCount = 0;
+    let examCount = 0;
+
+    const studentCounter =
+        document.getElementById("studentCount");
+
+    const teacherCounter =
+        document.getElementById("teacherCount");
+
+    const examCounter =
+        document.getElementById("examCount");
+
+
+    /* ================= PHOTO PREVIEW ================= */
+
+    const photo =
+        document.getElementById("photo");
+
+    const photoPreview =
+        document.getElementById("photoPreview");
+
+    let photoUrl = null;
+
+    photo.addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        if (photoUrl) {
+            URL.revokeObjectURL(photoUrl);
+            photoUrl = null;
+        }
+
+        if (file) {
+
+            if (!file.type.startsWith("image/")) {
+
+                alert("Please select a valid image file.");
+
+                this.value = "";
+                photoPreview.src = "";
+                photoPreview.style.display = "none";
+
+                return;
+            }
+
+            photoUrl =
+                URL.createObjectURL(file);
+
+            photoPreview.src = photoUrl;
+
+            photoPreview.style.display =
+                "block";
+
+        } else {
+
+            photoPreview.src = "";
+
+            photoPreview.style.display =
+                "none";
+        }
+
+    });
+
+
+    /* ================= STUDENT FORM ================= */
+
+    const studentForm =
+        document.getElementById("studentForm");
+
+    studentForm.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+            studentCount++;
+
+            studentCounter.textContent =
+                studentCount;
+
+            alert(
+                "Student information saved successfully!"
+            );
+
+            studentForm.reset();
+
+            if (photoUrl) {
+
+                URL.revokeObjectURL(photoUrl);
+
+                photoUrl = null;
+            }
+
+            photoPreview.src = "";
+
+            photoPreview.style.display =
+                "none";
+
+        }
+    );
+
+
+    /* ================= ADMISSION FORM ================= */
+
+    const admissionForm =
+        document.getElementById("admissionForm");
+
+    admissionForm.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+            alert(
+                "Admission submitted successfully!"
+            );
+
+            admissionForm.reset();
+
+        }
+    );
+
+
+    /* ================= TEACHER FORM ================= */
+
+    const teacherForm =
+        document.getElementById("teacherForm");
+
+    teacherForm.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+            teacherCount++;
+
+            teacherCounter.textContent =
+                teacherCount;
+
+            alert(
+                "Teacher information saved successfully!"
+            );
+
+            teacherForm.reset();
+
+        }
+    );
+
+
+    /* ================= EXAM FORM ================= */
+
+    const examForm =
+        document.getElementById("examForm");
+
+    examForm.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+            const examId =
+                document.getElementById("examId").value.trim();
+
+            const examName =
+                document.getElementById("examName").value.trim();
+
+            const studentId =
+                document.getElementById("examStudentId").value.trim();
+
+            const subject =
+                document.getElementById("examSubject").value;
+
+            const totalMarks =
+                Number(
+                    document.getElementById("totalMarks").value
+                );
+
+            const obtainedMarks =
+                Number(
+                    document.getElementById("obtainedMarks").value
+                );
+
+            const examResult =
+                document.getElementById("examResult").value;
+
+
+            /* Validate marks */
+
+            if (obtainedMarks > totalMarks) {
+
+                alert(
+                    "Obtained marks cannot be greater than total marks."
+                );
+
+                return;
+            }
+
+
+            if (totalMarks <= 0) {
+
+                alert(
+                    "Total marks must be greater than zero."
+                );
+
+                return;
+            }
+
+
+            /* Calculate percentage */
+
+            const percentage =
+                (
+                    (obtainedMarks / totalMarks) * 100
+                ).toFixed(2);
+
+
+            /* Calculate result automatically */
+
+            const result =
+                percentage >= 40 ? "Pass" : "Fail";
+
+
+            examCount++;
+
+            examCounter.textContent =
+                examCount;
+
+
+            const reportTable =
+                document.getElementById("reportTable");
+
+            const noReport =
+                document.getElementById("noReport");
+
+
+            if (noReport) {
+                noReport.remove();
+            }
+
+
+            /* Create table row */
+
+            const row =
+                document.createElement("tr");
+
+
+            const values = [
+                examId,
+                studentId,
+                examName,
+                subject,
+                totalMarks,
+                obtainedMarks,
+                percentage + "%",
+                result
+            ];
+
+
+            values.forEach(function (value) {
+
+                const cell =
+                    document.createElement("td");
+
+                cell.textContent =
+                    value;
+
+                row.appendChild(cell);
+
+            });
+
+
+            /* Delete button */
+
+            const actionCell =
+                document.createElement("td");
+
+            const deleteButton =
+                document.createElement("button");
+
+            deleteButton.type =
+                "button";
+
+            deleteButton.textContent =
+                "Delete";
+
+            deleteButton.className =
+                "btn btn-danger";
+
+
+            deleteButton.addEventListener(
+                "click",
+                function () {
+
+                    row.remove();
+
+                    examCount--;
+
+                    if (examCount < 0) {
+                        examCount = 0;
+                    }
+
+                    examCounter.textContent =
+                        examCount;
+
+
+                    if (
+                        reportTable.children.length === 0
+                    ) {
+
+                        reportTable.innerHTML = `
+                            <tr id="noReport">
+                                <td colspan="9" class="no-records">
+                                    No exam reports available
+                                </td>
+                            </tr>
+                        `;
+
+                    }
+
+                }
+            );
+
+
+            actionCell.appendChild(
+                deleteButton
+            );
+
+            row.appendChild(
+                actionCell
+            );
+
+            reportTable.appendChild(
+                row
+            );
+
+
+            alert(
+                "Exam report saved successfully!"
+            );
+
+            examForm.reset();
+
+        }
+    );
+
+
+    /* ================= CONTACT FORM ================= */
+
+    const contactForm =
+        document.getElementById("contactForm");
+
+    contactForm.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+            alert(
+                "Your message has been sent successfully!"
+            );
+
+            contactForm.reset();
+
+        }
+    );
+
+
+    /* ================= WINDOW RESIZE ================= */
+
+    window.addEventListener(
+        "resize",
+        function () {
+
+            if (window.innerWidth > 768) {
+
+                menu.classList.remove("active");
+
+                menuButton.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+                menuButton.setAttribute(
+                    "aria-label",
+                    "Open menu"
+                );
+
+            }
+
+        }
+    );
+
+</script>
+```
+
+</body>
+</html>
